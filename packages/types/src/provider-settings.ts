@@ -377,9 +377,7 @@ const moonshotSchema = apiModelIdProviderModelSchema.extend({
 })
 
 const minimaxSchema = apiModelIdProviderModelSchema.extend({
-	minimaxBaseUrl: z
-		.union([z.literal("https://api.minimax.io/anthropic"), z.literal("https://api.minimaxi.com/anthropic")]) // kilocode_change: anthropic
-		.optional(),
+	minimaxBaseUrl: z.string().optional(), // kilocode_change: allow custom URLs
 	minimaxApiKey: z.string().optional(),
 })
 
