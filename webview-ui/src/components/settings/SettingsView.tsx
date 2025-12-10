@@ -149,6 +149,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 	const confirmDialogHandler = useRef<() => void>()
 
 	const [cachedState, setCachedState] = useState(() => extensionState)
+	const hasInitiallyLoaded = useRef(false) // kilocode_change: Track if we've loaded the initial config
 
 	// kilocode_change begin
 	useEffect(() => {
@@ -268,6 +269,19 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 
 	// kilocode_change start
 	const isLoadingProfileForEditing = useRef(false)
+
+	// Load the initial configuration on mount
+	useEffect(() => {
+		if (!hasInitiallyLoaded.current && editingApiConfigName) {
+			hasInitiallyLoaded.current = true
+			isLoadingProfileForEditing.current = true
+			vscode.postMessage({
+				type: "getProfileConfigurationForEditing",
+				text: editingApiConfigName,
+			})
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []) // Only run once on mount
 
 	useEffect(() => {
 		const handleMessage = (event: MessageEvent) => {

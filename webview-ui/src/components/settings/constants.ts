@@ -23,7 +23,7 @@ import {
 	fireworksModels,
 	rooModels,
 	featherlessModels,
-	minimaxModels,
+	// minimaxModels,
 } from "@roo-code/types"
 
 export const MODELS_BY_PROVIDER: Partial<Record<ProviderName, Record<string, ModelInfo>>> = {
@@ -50,7 +50,7 @@ export const MODELS_BY_PROVIDER: Partial<Record<ProviderName, Record<string, Mod
 	fireworks: fireworksModels,
 	roo: rooModels,
 	featherless: featherlessModels,
-	minimax: minimaxModels,
+	// minimax: minimaxModels,
 }
 
 export const PROVIDERS = [

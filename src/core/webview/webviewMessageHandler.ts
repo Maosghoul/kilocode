@@ -2092,15 +2092,27 @@ export const webviewMessageHandler = async (
 		// kilocode_change start: Load profile configuration for editing without activating
 		case "getProfileConfigurationForEditing":
 			if (message.text) {
-				const { name: _, ...profileConfig } = await provider.providerSettingsManager.getProfile({
-					name: message.text,
-				})
-				// Send the configuration back to the webview without activating it
-				await provider.postMessageToWebview({
-					type: "profileConfigurationForEditing",
-					text: message.text,
-					apiConfiguration: profileConfig,
-				})
+				try {
+					const { name: _, ...profileConfig } = await provider.providerSettingsManager.getProfile({
+						name: message.text,
+					})
+					// Send the configuration back to the webview without activating it
+					await provider.postMessageToWebview({
+						type: "profileConfigurationForEditing",
+						text: message.text,
+						apiConfiguration: profileConfig,
+					})
+				} catch (error) {
+					provider.log(
+						`Error loading profile configuration for editing: ${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}`,
+					)
+					// If config doesn't exist, send an empty config
+					await provider.postMessageToWebview({
+						type: "profileConfigurationForEditing",
+						text: message.text,
+						apiConfiguration: {},
+					})
+				}
 			}
 			break
 		// kilocode_change end

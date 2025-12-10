@@ -36,5 +36,7 @@ export const minimaxModels = {
 	},
 } as const satisfies Record<string, ModelInfo>
 
+export const minimaxDefaultModelInfo: ModelInfo = minimaxModels[minimaxDefaultModelId]
+
 export const MINIMAX_DEFAULT_MAX_TOKENS = 16384 // kilocode_change
 export const MINIMAX_DEFAULT_TEMPERATURE = 1.0
