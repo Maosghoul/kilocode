@@ -1,19 +1,28 @@
 import { useCallback } from "react"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
-import type { ProviderSettings } from "@roo-code/types"
+import type { ProviderSettings, OrganizationAllowList } from "@roo-code/types"
+import { minimaxModels } from "@roo-code/types"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
+import { ModelPicker } from "../ModelPicker"
 
 import { inputEventTransform } from "../transforms"
 
 type MiniMaxProps = {
 	apiConfiguration: ProviderSettings
 	setApiConfigurationField: (field: keyof ProviderSettings, value: ProviderSettings[keyof ProviderSettings]) => void
+	organizationAllowList: OrganizationAllowList
+	modelValidationError?: string
 }
 
-export const MiniMax = ({ apiConfiguration, setApiConfigurationField }: MiniMaxProps) => {
+export const MiniMax = ({
+	apiConfiguration,
+	setApiConfigurationField,
+	organizationAllowList,
+	modelValidationError,
+}: MiniMaxProps) => {
 	const { t } = useAppTranslation()
 
 	const handleInputChange = useCallback(
@@ -38,18 +47,17 @@ export const MiniMax = ({ apiConfiguration, setApiConfigurationField }: MiniMaxP
 					<label className="block font-medium mb-1">{t("settings:providers.minimaxBaseUrl")}</label>
 				</VSCodeTextField>
 			</div>
-			<div>
-				<VSCodeTextField
-					value={apiConfiguration?.apiModelId || ""}
-					onInput={handleInputChange("apiModelId")}
-					placeholder="MiniMax-M2"
-					className="w-full">
-					<label className="block font-medium mb-1">{t("settings:providers.model")}</label>
-				</VSCodeTextField>
-				<div className="text-sm text-vscode-descriptionForeground">
-					{t("settings:providers.customModelIdNotice")}
-				</div>
-			</div>
+			<ModelPicker
+				apiConfiguration={apiConfiguration}
+				setApiConfigurationField={setApiConfigurationField}
+				defaultModelId="MiniMax-M2"
+				models={minimaxModels}
+				modelIdKey="apiModelId"
+				serviceName="MiniMax"
+				serviceUrl="https://www.minimax.io"
+				organizationAllowList={organizationAllowList}
+				errorMessage={modelValidationError}
+			/>
 			<div>
 				<VSCodeTextField
 					value={apiConfiguration?.minimaxApiKey || ""}
