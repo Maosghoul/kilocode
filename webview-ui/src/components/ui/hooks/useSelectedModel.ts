@@ -9,6 +9,7 @@ import {
 	deepSeekModels,
 	moonshotModels,
 	minimaxModels,
+	minimaxDefaultModelInfo,
 	geminiModels,
 	geminiDefaultModelId,
 	// kilocode_change start
@@ -297,7 +298,8 @@ function getSelectedModel({
 		}
 		case "minimax": {
 			const id = apiConfiguration.apiModelId ?? defaultModelId
-			const info = minimaxModels[id as keyof typeof minimaxModels]
+			// Use default model info for custom models to provide reasonable defaults
+			const info = minimaxModels[id as keyof typeof minimaxModels] ?? minimaxDefaultModelInfo
 			return { id, info }
 		}
 		case "zai": {
